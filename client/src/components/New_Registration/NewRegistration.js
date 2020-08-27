@@ -1,5 +1,6 @@
 import React,{useEffect,useState} from "react";
 import { Form, Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 function NewRegistration({instance,accounts,web3}){
   const [ownername,setownername] = useState("");
   const [vehicletype,setvehicletype] = useState("");
@@ -10,10 +11,16 @@ function NewRegistration({instance,accounts,web3}){
     await instance.methods
     .propose_newRegistration(ownername,vehicletype,chassis)
     .send({from:accounts[0],value:web3.utils.toWei("3","ether")});
-  }
-
+}
   return(
     <div>
+    <Link to={`/`}>
+    <button class="ui labeled icon button inactive">
+    <i class="left chevron icon"></i>
+    Back
+    </button>
+    </Link>
+
     <Form onSubmit = {onSubmit}>
     <Form.Field>
     <Form.Input
@@ -37,7 +44,7 @@ function NewRegistration({instance,accounts,web3}){
     />
     </Form.Field>
 
-    <Button color="green">Register</Button>
+    <Button color="green" class="ui primary loading button">Register</Button>
     </Form>
     <h3>Note: "3" ether should be paid as registration fee</h3>
     </div>

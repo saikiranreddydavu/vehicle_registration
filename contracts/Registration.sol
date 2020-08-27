@@ -3,9 +3,9 @@ pragma solidity ^0.6.0;
 contract Registration{
 
     address public owner;
-    uint256 index;
-    uint256 amount; // new Registration amount
-    uint256 chng_amount; // change registration amount
+    uint256 public index;
+    uint256 public amount; // new Registration amount
+    uint256 public chng_amount; // change registration amount
 
     constructor() public{
         owner = msg.sender;
@@ -13,9 +13,7 @@ contract Registration{
         amount = 3;
         chng_amount = 1;
     }
-
     struct newRegistration{
-
         address owner;
         uint256 hand;
         string vehicleno;
@@ -24,13 +22,11 @@ contract Registration{
         uint256 chassis;
         bool pending;
         uint256 Index;
-        uint amount;
-
-    }
-
+        uint256 amount;
+        bool reject;
+  }
     mapping(uint256 => newRegistration) public registration;
-
-    modifier onlyOwner(){
+        modifier onlyOwner(){
         require(msg.sender == owner);
         _;
     }
@@ -49,17 +45,12 @@ contract Registration{
             chassis : _chassis,
             pending : true,
             Index : index,
-            amount : msg.value
-
-
-        });
+            amount : msg.value,
+            reject :false
+          });
 
         registration[index] = regi;
-
-
-    }
-
-
+      }
     function confirm_newRegistration(uint _index,string memory _vehicleno)public onlyOwner{
 
         registration[_index].vehicleno = _vehicleno;
@@ -67,12 +58,11 @@ contract Registration{
         (bool success, ) = owner.call.value(
                         registration[_index].amount
                     )("");
-
-
-
-    }
+}
 
     function reject_Registration(uint _index)public onlyOwner{
+        require(registration[_index].reject == false);
+        registration[_index].reject = true;
         (bool success,) = registration[_index].owner.call.value(
             registration[_index].amount
             )("");
@@ -89,9 +79,4 @@ contract Registration{
         registration[_index].hand++;
 
     }
-
-
-
-
-
 }

@@ -1,6 +1,8 @@
 import React,{Component} from "react";
 import getWeb3 from "./getWeb3";
 import registration from "./contracts/Registration.json";
+import Registered from "./components/Registered_vehicles/Registered"
+import View from "./components/Registered_vehicles/View"
 import MainNavigation from "./components/Navigation/MainNavigation";
 import {
   BrowserRouter as Router,
@@ -9,13 +11,14 @@ import {
   Switch,
 } from "react-router-dom";
 import NewRegistration from "./components/New_Registration/NewRegistration";
-import Pending from "./components/pendingRegistrations/Pending"
+import Pending from "./components/pendingRegistrations/Pending";
+import ChangeRegistration from "./components/change_Registration/ChangeRegistration";
 class App extends Component{
   state = {
     storageValue: 0,
     web3: null,
     accounts: null,
-    Instance: null,
+    Instance: null
   };
 
   componentDidMount = async () => {
@@ -49,6 +52,9 @@ class App extends Component{
   };
 render(){
   console.log(this.state.Instance)
+  if (!this.state.web3) {
+    return <div>Loading Web3, accounts, and contract...</div>;
+  }
   return(
     <div>
 
@@ -56,6 +62,20 @@ render(){
     <MainNavigation accounts={this.state.accounts} />
     <main>
     <Switch>
+      <Route path = "/" exact>
+        <Registered
+        instance = {this.state.Instance}
+        accounts = {this.state.accounts}
+        web3 = {this.state.web3}
+        />
+      </Route>
+      <Route path="/changeRegistration/:Index" exact>
+      <ChangeRegistration
+      instance = {this.state.Instance}
+      accounts = {this.state.accounts}
+      web3 = {this.state.web3}
+        />
+      </Route>
       <Route path="/newRegistration" exact>
       <NewRegistration
       instance = {this.state.Instance}
@@ -63,8 +83,15 @@ render(){
       web3 = {this.state.web3}
         />
       </Route>
-      <Route path= "/pending">
+      <Route path= "/pending" exact>
       <Pending
+      instance = {this.state.Instance}
+      accounts = {this.state.accounts}
+      web3 = {this.state.web3}
+      />
+      </Route>
+      <Route path= "/view/:Index" exact>
+      <View
       instance = {this.state.Instance}
       accounts = {this.state.accounts}
       web3 = {this.state.web3}
@@ -73,10 +100,7 @@ render(){
       </Switch>
     </main>
     </Router>
-
-
-
-   </div>
+</div>
 
  );
 }

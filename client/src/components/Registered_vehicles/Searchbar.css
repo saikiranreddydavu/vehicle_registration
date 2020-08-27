@@ -1,0 +1,90 @@
+.search{
+  width: 100%;
+  text-align:center;
+}
+
+.changereg{
+  width: 100%;
+  text-align:center;
+}
+/* //registered.js
+
+import React,{ useEffect,useState } from "react";
+import {Form,Button,Search,Grid,Header,Segment} from "semantic-ui-react"
+import RegisteredCard from "./RegisteredCard"
+import {Link} from "react-router-dom";
+import search from "./Searchbar.css";
+import Searchdata from "./Search.js";
+function Registered({instance,accounts,web3}){
+const [index,setIndex] = useState();
+const [search,setSearch] = useState();
+const [registrations,setRegistrations] = useState([]);
+  useEffect(()=>{
+    const load = async()=>{
+      console.log("hii")
+        const ind = await instance.methods.index().call();
+        setIndex(ind)
+        let proposals = []
+        for(let i = 1; i<=ind;i++){
+          const reg = await instance.methods.registration(i).call();
+          proposals.push(
+            {
+              owner : reg[0],
+              hand : reg[1],
+              vehicleno : reg[2],
+              owner_name : reg[3],
+              vehicle_type : reg[4],
+              chassis : reg[5],
+              pending : reg[6],
+              Index : reg[7],
+              amount : reg[8],
+              reject :reg[9]
+            });
+        }
+        setRegistrations(proposals);
+
+    }
+    load()
+  },[])
+
+  console.log(registrations[0])
+  return(
+    <div>
+    <Link to={`/newRegistration`}>
+        <div class="ui teal labeled icon button">
+        New Registration
+        <i class="add icon"></i>
+        </div>
+    </Link>
+      <Searchdata
+        instance = {instance}
+        accounts = {accounts}
+        web3 = {web3}
+
+      />
+      <h1>Registered vehicles:</h1>
+    <Grid>
+    <Grid.Row columns = {4} divided >
+      {
+      registrations.map((reg)=>{
+        if(reg.pending === false){
+        return(
+          <Grid.Column>
+        <RegisteredCard
+        instance = {instance}
+        accounts = {accounts}
+        web3 = {web3}
+        registration = {reg}
+        />
+        </Grid.Column>
+      )}
+    })
+  }
+    </Grid.Row>
+
+</Grid>
+    </div>
+  )
+}
+
+export default Registered; */
